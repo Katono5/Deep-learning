@@ -76,3 +76,31 @@ user.increse_login_attempts()
 user.increse_login_attempts()
 user.reset_login_attempts()
 
+class IceCreamStand(Restaurant):
+    """Further add new feature"""
+    def __init__(self, restaurant_info, cuisine_type, set_number_served):
+        super().__init__(restaurant_info, cuisine_type, set_number_served)
+        self.flavours = ['vanilla', 'grape', 'pineapple']
+    def icecream(self, flavours):
+        if flavours == 'vanilla':
+            print("Add vanilla sourse")
+        elif flavours == 'grape':
+            print('Add grape sourse')
+        else:
+            print('Add pineapple sourse')
+
+
+my_order = IceCreamStand('Ice creamy', 'icecream', 9)
+my_order.icecream('grape')
+
+
+class Admin(User):
+    def __init__(self):
+        super().__init__('admin', '')
+        self.privileges = ['can add post', 'can delete post', 'can ban user']
+    def show_privileges(self):
+        for privilege in self.privileges:
+            print(privilege)
+user = Admin()
+user.show_privileges()
+
