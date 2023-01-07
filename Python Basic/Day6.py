@@ -22,13 +22,13 @@ for num in range(1,101):
 	i += num
 print(i)
 
-Foods = ['curry','cheese','pizza']
+Foods = ['curry', 'cheese', 'pizza']
 favorite = Foods[:]
 
 print(Foods)
 print(favorite)
 
-item = ['apple','banana','grape','pizza','curry']
+item = ['apple', 'banana', 'grape', 'pizza', 'curry']
 
 print(item[0:3])
 print(item[1:4])
