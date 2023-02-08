@@ -1,0 +1,79 @@
+\begin{figure}
+\centering
+\includegraphics{https://s3.bmp.ovh/imgs/2023/02/06/1b0360e83abd08fe.png}
+\caption{Structure}
+\end{figure}
+
+\hypertarget{ux6846ux67b6ux6a21ux578b}{%
+\subsection{框架模型}\label{ux6846ux67b6ux6a21ux578b}}
+
+为了方便看结构我把每个功能单列为一个python文件放在了Structure1文件夹下 -
+custom\_model：对本题网络的搭建实现，计算flop和参数量（已被注释） -
+datasets：读取数据集的方法，对数据集的通道，大小进行调整统一，实现了实验数据集和验证数据集的分离
+- params：超参数控制台，存放了所有超参数便于后续调参，也存放了文件路径 -
+run：训练模型的主体代码 -
+train\_valid\_split：单独的一块代码，在开始run之前要单独运行一次，目的是把一个完整的数据集划分成一个train和一个valid
+- log：存放log模型和最后画图的function -
+output文件夹：存放实验中保存的训练模型和训练日志
+
+\hypertarget{train-valid-split}{%
+\subsubsection{Train-valid split}\label{train-valid-split}}
+
+本题数据集没有划分train和valid,所以需要自己划分，这个程序就是从原本的数据集中随机抽80\%作为训练集，剩下20\%作为验证集，单独写出来这一个程序是为了方便后边Task2，Task3都可以用。
+
+\hypertarget{custom-model}{%
+\subsubsection{Custom-Model}\label{custom-model}}
+
+本体已经给出了网络的图，按着图一行一行打就行，为了避免多次重复操作，残差的那一个小block我单独拎出来写了一个class，在搭建完整网络的时候直接插入就好，在这个网络后边有一个被注释掉的小块代码
+
+\begin{figure}
+\centering
+\includegraphics{https://s3.bmp.ovh/imgs/2023/02/06/8f675c8cec2f6773.png}
+\caption{Counting params and flops}
+\end{figure}
+
+是\textbf{计算网络flop和params}用的，这里我调了thop包，为了保证代码运行过程连贯这一步的结果我单独放在这个报告里。
+
+\begin{figure}
+\centering
+\includegraphics{https://s3.bmp.ovh/imgs/2023/02/06/5ed98833917b0a59.png}
+\caption{output}
+\end{figure}
+
+\hypertarget{datasets}{%
+\subsubsection{Datasets}\label{datasets}}
+
+这一个文件我写的有点长了，操作有些地方也比较不清晰，但原理就是对图片进行统一resize到112x112，如果不是RGB三通道，那就调整到三通道
+
+\begin{figure}
+\centering
+\includegraphics{https://s3.bmp.ovh/imgs/2023/02/06/df948e9ee674cbda.png}
+\caption{Pic Resize}
+\end{figure}
+
+\begin{figure}
+\centering
+\includegraphics{https://s3.bmp.ovh/imgs/2023/02/06/ac526bfff2758135.png}
+\caption{Convert Channels}
+\end{figure}
+
+然后一个一个把文件和label从文件夹里读出来放在files和labels列表里方便后续读取，同时把Train和Valid数据集分开读取。
+
+\hypertarget{log}{%
+\subsubsection{Log}\label{log}}
+
+也没啥可说的，先有一个模板，然后分别输出到日志文件(./output/log.txt)里和终端里让用户看到目前的情况，在日志函数后还有一个画图的函数，把日志文件里的数据用正则表达式一个一个读取到列表里，最后统一画图，用正则表达式来实现画图的操作是因为我觉得最后从一个txt文件里读数据再画图会快很多。
+
+\hypertarget{run}{%
+\subsubsection{Run}\label{run}}
+
+训练模型的主体部分，把数据读取出来，清空一下日志文件（因为写的时候我是用append方法写进去的不会自己删除），然后调用规定好的超参数开始训练，把网络，优化器，损失函数都规定好以后就可以扔DEVICE里开始训练了。
+
+\hypertarget{ux653eux4e00ux4e0bux7ed3ux679cux56fe}{%
+\subsection{放一下结果图}\label{ux653eux4e00ux4e0bux7ed3ux679cux56fe}}
+
+\begin{figure}
+\centering
+\includegraphics{https://s3.bmp.ovh/imgs/2023/02/06/79576a1128a7b943.jpg}
+\caption{Results}
+\end{figure}
